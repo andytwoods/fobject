@@ -1,3 +1,11 @@
+// we first give our object functional functions with fo(my_obj)
+// we then can use eg var cloned_and_modded = my_obj.map(function(val, key){ return val+key}).done()
+// Above {a: 1, b:2} gives {a:1a, b:2b}
+//We need to run done() at the end to provide clean object without functional functions.
+
+
+
+
 var fo = (function(orig_el){
     var reservedKeys = ['map', 'forEach', 'filter', 'done']
         function isObj(ob){
