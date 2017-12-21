@@ -7,7 +7,7 @@
 
 
 var fo = (function(orig_el){
-    var reservedKeys = ['map', 'forEach', 'filter', 'done']
+    var reservedKeys = ['map', 'forEach', 'filter', 'reduce', 'done']
         function isObj(ob){
         return ob !== null && typeof ob === 'object'
     }
@@ -22,17 +22,21 @@ var fo = (function(orig_el){
     if(!isObj(orig_el)) throw('only currently accepting objects')
     if(reserved(orig_el)) throw('sorry, your object is using 1+ reserved keys ('+reservedKeys.join(",")+")")
 
+    function checks(f, output, what){
+        if(!f) throw('not provided a function for obj.' + what)
+        if(!output) output = fo({})
+        else{
+            // need to give existing obj superpowers if they dont already exist
+            if(!output[what]) fo(output)
+        }
+        return output
+    }
 
 
 
     // can provide existing obj to be modded in place
     function map(f, output){
-        if(!f) throw('not provided a function for obj.map')
-        if(!output) output = fo({})
-        else{
-            // need to give existing obj superpowers if they dont already exist
-            if(!output['map']) fo(output)
-        }
+        checks(f, output, 'map')
         for(var key in orig_el){
             // lets apply the function to the value and add to output
             if(reservedKeys.indexOf(key)===-1) {
@@ -52,13 +56,9 @@ var fo = (function(orig_el){
     }
 
 
+
     function filter(f, output){
-        if(!f) throw('not provided a function for obj.map')
-        if(!output) output = fo({})
-        else{
-            // need to give existing obj superpowers if they dont already exist
-            if(!output['map']) fo(output)
-        }
+        checks(f, output, 'filter')
 
         for(var key in orig_el){
             // lets apply the function to the value and add to output
@@ -70,6 +70,17 @@ var fo = (function(orig_el){
             }
         }
         return output
+    }
+
+    
+    function reduce(f, output){
+        checks(f, output, 'reduce')
+        var ongoing
+        for(var key in orig_el){
+            if(!ongoing) ongoing = f(orig_el[key], key)
+            else ongoing += f(orig_el[key], key)
+        }
+        return ongoing
     }
 
 
@@ -90,6 +101,7 @@ var fo = (function(orig_el){
     orig_el.map = map
     orig_el.forEach = forEach
     orig_el.filter = filter
+    orig_el.reduce = reduce
     orig_el.done = done
 
     return orig_el
