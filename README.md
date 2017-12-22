@@ -6,6 +6,8 @@ Dropping down to for loops with objects is a pain. A lazy person's functional to
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
+npm install funobjects
+
 ### Prerequisites
 
 What things you need to install the software and how to install them
