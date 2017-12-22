@@ -1,10 +1,8 @@
 # FObject
 
-Dropping down to for loops with objects is a pain. A minimal  functional toolbelt for objects... that gives you the final object to play with alongside keys and vals.
+Dropping down to for loops with objects is a pain (and loud exclamations of FO). A minimal chainable no nonsense functional toolbelt for objects, giving you access final object mid 'loop'.
 
 ## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Installing
 
@@ -42,6 +40,17 @@ result = fobj.map(function(a, b, output){
 //output:{a:'1a', b:'2b', '1b': 'hello!', '2b': 'hello!'}
 ```
 
+Let's start chaining
+```
+    obj = fo({a:1, b:2, c: 3})
+
+    var computed = obj.filter(function(val, key, final_obj){return val>1}).map(function(val, key, final_obj){
+        final_obj[key+'_squared_key'] = String(val * val)+key
+        return val*val
+    }).done()
+
+    //output: { b_squared_key: '4b', b: 4, c_squared_key: '9c', c: 9 })
+```
 
 ## Running the tests
 
