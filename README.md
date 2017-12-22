@@ -1,89 +1,52 @@
 # FObject
 
-Dropping down to for loops with objects is a pain. A lazy person's functional toolbelt for objects.
+Dropping down to for loops with objects is a pain. A minimal  functional toolbelt for objects... that gives you the final object to play with alongside keys and vals.
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-npm install funobjects
-
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
 ### Installing
 
 A step by step series of examples that tell you have to get a development env running
 
-Say what the step will be
+Install locally
 
 ```
-Give the example
+npm install funobjects
 ```
 
-And repeat
-
+Lets import
 ```
-until finished
+var fo = require('fobject')
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+
+Then start using
+```
+var obj = {a:1, b:2}
+var fobj = fo(obj)
+result = fobj.map(function(a, b){return a+b})
+//output:{a:'1a', b:'2b'}
+```
+
+Then start using with a deadline and after a few cups of coffee
+```
+var obj = {a:1, b:2}
+var fobj = fo(obj)
+result = fobj.map(function(a, b, output){
+    output[b] = 'hello!'
+    return a+b
+    }
+)
+//output:{a:'1a', b:'2b', '1b': 'hello!', '2b': 'hello!'}
+```
+
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+Tests done with Tape
 ```
-Give an example
+npm tests/*.js
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
