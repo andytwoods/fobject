@@ -6,20 +6,22 @@
 //We need to run done() at the end to provide clean object without functional functions.
 
 var fo = function(orig_el){
-    var reservedKeys = ['map', 'forEach', 'filter', 'reduce', 'keys','vals', 'done']
-        function isObj(ob){
+
+    function isObj(ob){
         return ob !== null && typeof ob === 'object'
     }
+
     function reserved(ob){
-        reservedKeys.forEach(function(r){
-            if(ob[r]!==undefined)return true
-        })
+        for(var key in functional_Fs) {
+            if (ob[key] !== undefined) return true
+        }
         return false
     }
 
-
     if(!isObj(orig_el)) throw('only currently accepting objects')
-    if(reserved(orig_el)) throw('sorry, your object is using 1+ reserved keys ('+reservedKeys.join(",")+")")
+    if(reserved(orig_el)){
+        throw('sorry, your object is using 1+ reserved keys ('+fo(functional_Fs).keys().join(",")+")")
+    }
 
     function checks(f, output, what){
         if(!f) throw('not provided a function for obj.' + what)
@@ -31,22 +33,22 @@ var fo = function(orig_el){
         return output
     }
 
-    var fs = {}
+    var functional_Fs = {}
 
-    fs.keys = function(){
+    functional_Fs.keys = function(){
         var list = []
-            if(reservedKeys.indexOf(key)===-1) list.push(key)
+            list.push(key)
         return key
     }
 
-    fs.vals = function(){
+    functional_Fs.vals = function(){
         var list = []
-        if(reservedKeys.indexOf(key)===-1) list.push(orig_el[key])
+        list.push(orig_el[key])
         return list
     }
 
     // can provide existing obj to be modded in place
-    fs.map = function(f, output){
+    functional_Fs.map = function(f, output){
         output = checks(f, output, 'map')
         for(var key in orig_el){
             // lets apply the function to the value and add to output
@@ -56,7 +58,7 @@ var fo = function(orig_el){
     }
 
 
-    fs.forEach = function(f){
+    functional_Fs.forEach = function(f){
         for(var key in orig_el){
             f(orig_el[key], key)
         }
@@ -64,23 +66,23 @@ var fo = function(orig_el){
 
 
 
-    fs.filter = function(f, output){
+    functional_Fs.filter = function(f, output){
         output = checks(f, output, 'filter')
 
         for(var key in orig_el){
             // lets apply the function to the value and add to output
-            if(reservedKeys.indexOf(key)===-1) {
-                // readability over bytes ;)
-                if(f(orig_el[key], key) === true){
-                    output[key] = orig_el[key]
-                }
+
+            // readability over bytes ;)
+            if(f(orig_el[key], key) === true){
+                output[key] = orig_el[key]
             }
+
         }
         return output
     }
 
 
-    fs.reduce = function(f, output){
+    functional_Fs.reduce = function(f, output){
         if(!f) throw('not provided a function for obj.reduce')
         for(var key in orig_el){
             var result = f(orig_el[key], key, output)
@@ -93,10 +95,8 @@ var fo = function(orig_el){
     }
 
 
-
-
     // let's clone, leaving out our custom functions
-    fs.done = function (){
+    functional_Fs.done = function (){
         var clone = {}
         for(var key in orig_el){
             clone[key] = orig_el[key]
@@ -104,8 +104,8 @@ var fo = function(orig_el){
         return clone
     }
 
-    for(var f_nam in fs) {
-        orig_el[f_nam] = fs[f_nam]
+    for(var f_nam in functional_Fs) {
+        orig_el[f_nam] = functional_Fs[f_nam]
         Object.defineProperty(orig_el, f_nam, {
             enumerable: false,
             writable: false

@@ -3,7 +3,7 @@ var fo = require('fobject')
 
 
 test('object tests', function (t) {
-    t.plan(8);
+    t.plan(6);
 
     var obj = {a:1, b:2}
     fo(obj)
@@ -28,22 +28,6 @@ test('object tests', function (t) {
     t.equals(result, '1a2b')
 
 
-    // check adds and removes all the reserved methods
-
-    var modded = fo({a:1})
-
-    var counter = 0
-    for(var key in modded){
-        counter++
-    }
-    t.true(counter>1)
-    var should_be_orig = modded.done()
-    counter = 0
-    for(key in should_be_orig){
-        counter++
-    }
-    t.equals(counter,1)
-
     obj = fo({a:1, b:2, c: 3})
 
     var computed = obj.filter(function(val, key, final_obj){return val>1}).map(function(val, key, final_obj){
@@ -53,3 +37,4 @@ test('object tests', function (t) {
 
     t.deepEqual(computed, { b_squared_key: '4b', b: 4, c_squared_key: '9c', c: 9 })
 });
+
