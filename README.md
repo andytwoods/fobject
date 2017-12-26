@@ -40,6 +40,20 @@ result = fobj.map(function(a, b, output){
 //output:{a:'1a', b:'2b', '1b': 'hello!', '2b': 'hello!'}
 ```
 
+Annoying if you want an array as output? No problem
+```
+var obj = {a:1, b:2}
+var fobj = fo(obj)
+result = fobj.map(function(a, b, output){
+    output[b] = 'hello!'
+    return a+b
+    },
+    []
+)
+//output:['1a', '2b', 'hello!', 'hello!']
+```
+
+
 Let's start chaining
 ```
     obj = fo({a:1, b:2, c: 3})
@@ -51,6 +65,8 @@ Let's start chaining
 
     //output: { b_squared_key: '4b', b: 4, c_squared_key: '9c', c: 9 })
 ```
+
+
 
 ## Running the tests
 

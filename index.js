@@ -2,7 +2,15 @@
 
 var fo = function(orig_el){
 
-    var id = '__functional_Objects__'
+    var type = undefined
+    if(isObj(orig_el)) {
+        type = '{}'
+    }
+    else if (isArr(orig_el)){
+        throw 'only allowing {} for the moment. Best to stick with native.'
+        type ='[]'
+    }
+    else throw 'fo only accepts arrays and objects :S'
 
     var functional_Fs = {}
 
@@ -21,10 +29,13 @@ var fo = function(orig_el){
     // can provide existing obj to be modded in place
     functional_Fs.map = function(f, output){
         output = generate_output(output)
-        checks(f, 'map')
+        var output_is_arr = isArr(output)
         for(var key in orig_el){
             // lets apply the function to the value and add to output
-            output[key] = f(orig_el[key], key, output)
+            if(output_is_arr){
+                output.push(f(orig_el[key], key, output))
+            }
+            else output[key] = f(orig_el[key], key, output)
         }
         return output
     }
@@ -40,14 +51,16 @@ var fo = function(orig_el){
 
     functional_Fs.filter = function(f, output){
         output = generate_output(output)
-        checks(f, 'filter')
-
+        var output_is_arr = isArr(output)
         for(var key in orig_el){
             // lets apply the function to the value and add to output
 
             // readability over bytes ;)
             if(f(orig_el[key], key) === true){
-                output[key] = orig_el[key]
+                if(output_is_arr){
+                    output.push(orig_el[key])
+                }
+                else output[key] = orig_el[key]
             }
 
         }
@@ -81,47 +94,38 @@ var fo = function(orig_el){
         return ob !== null && typeof ob === 'object'
     }
 
-    function reserved(ob){
-        for(var key in functional_Fs) {
-            if (ob[key] !== undefined) return true
+    //https://stackoverflow.com/questions/4775722/check-if-object-is-array
+    function isArr(ob){
+        if (Array.isArray)
+            return Array.isArray(ob);
+        if( Object.prototype.toString.call( ob ) === '[object Array]' ) {
+            return true
         }
         return false
     }
 
-    if(!isObj(orig_el)) throw('only currently accepting objects')
-    if(reserved(orig_el)){
-        throw('sorry, your object is using 1+ reserved keys ('+fo(functional_Fs).keys().join(",")+")")
-    }
 
     function generate_output(output){
-        if(!output) output = fo({})
+        if(!output){
+            if(type === '{}') output = fo({})
+            else output = fo([])
+        }
         else{
             // need to give existing obj superpowers if they dont already exist
-            if(!output[id]) fo(output)
+            fo(output)
         }
         return output
     }
 
-    function checks(f, what){
-        if(!f) throw('not provided a function for obj.' + what)
-    }
 
 
     for(var f_nam in functional_Fs) {
         orig_el[f_nam] = functional_Fs[f_nam]
         Object.defineProperty(orig_el, f_nam, {
             enumerable: false,
-            writable: false
+            writable: true
         });
     }
-
-    //need a way to identify FO objects
-    orig_el[id] = true
-    Object.defineProperty(orig_el, id, {
-        enumerable: false,
-        writable: false
-    });
-
 
     return orig_el
 }
