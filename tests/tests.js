@@ -38,3 +38,16 @@ test('object tests', function (t) {
     t.deepEqual(computed, { b_squared_key: '4b', b: 4, c_squared_key: '9c', c: 9 })
 });
 
+
+test('array input to functional tests', function (t) {
+    t.plan(2);
+
+    var arr = {a:1, b:2, c:3}
+
+    t.deepEquals(fo(arr).map(function(val, key){return val},[]), [1,2,3])
+
+    t.deepEquals(fo(arr).filter(function(val, key){return val>1}, []),[2,3])
+
+})
+
+
