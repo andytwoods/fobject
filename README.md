@@ -45,7 +45,7 @@ Annoying if you want an array as output? No problem
 var obj = {a:1, b:2}
 var fobj = fo(obj)
 result = fobj.map(function(a, b, output){
-    output[b] = 'hello!'
+    output.push('hello!')
     return a+b
     },
     []
