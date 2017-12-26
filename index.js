@@ -31,47 +31,40 @@ var fo = function(orig_el){
         return output
     }
 
+    var fs = {}
 
-    function keys(){
+    fs.keys = function(){
         var list = []
-        for(var key in orig_el){
             if(reservedKeys.indexOf(key)===-1) list.push(key)
-        }
         return key
     }
 
-    function vals(){
+    fs.vals = function(){
         var list = []
-        for(var key in orig_el){
-            if(reservedKeys.indexOf(key)===-1) list.push(orig_el[key])
-        }
+        if(reservedKeys.indexOf(key)===-1) list.push(orig_el[key])
         return list
     }
 
     // can provide existing obj to be modded in place
-    function map(f, output){
+    fs.map = function(f, output){
         output = checks(f, output, 'map')
         for(var key in orig_el){
             // lets apply the function to the value and add to output
-            if(reservedKeys.indexOf(key)===-1) {
-                output[key] = f(orig_el[key], key, output)
-            }
+            output[key] = f(orig_el[key], key, output)
         }
         return output
     }
 
 
-    function forEach(f){
+    fs.forEach = function(f){
         for(var key in orig_el){
-            if(reservedKeys.indexOf(key)===-1) {
-                f(orig_el[key], key)
-            }
+            f(orig_el[key], key)
         }
     }
 
 
 
-    function filter(f, output){
+    fs.filter = function(f, output){
         output = checks(f, output, 'filter')
 
         for(var key in orig_el){
@@ -87,14 +80,13 @@ var fo = function(orig_el){
     }
 
 
-    function reduce(f, output){
+    fs.reduce = function(f, output){
         if(!f) throw('not provided a function for obj.reduce')
         for(var key in orig_el){
-            if(reservedKeys.indexOf(key)===-1) {
-                var result = f(orig_el[key], key, output)
-                if (!output) output = result
-                else output += result
-            }
+            var result = f(orig_el[key], key, output)
+            if (!output) output = result
+            else output += result
+
         }
 
         return output
@@ -104,21 +96,22 @@ var fo = function(orig_el){
 
 
     // let's clone, leaving out our custom functions
-    function done(){
+    fs.done = function (){
         var clone = {}
         for(var key in orig_el){
-           if(reservedKeys.indexOf(key)===-1){
-               clone[key] = orig_el[key]
-           }
+            clone[key] = orig_el[key]
         }
         return clone
     }
 
-    orig_el.map = map
-    orig_el.forEach = forEach
-    orig_el.filter = filter
-    orig_el.reduce = reduce
-    orig_el.done = done
+    for(var f_nam in fs) {
+        orig_el[f_nam] = fs[f_nam]
+        Object.defineProperty(orig_el, f_nam, {
+            enumerable: false,
+            writable: false
+        });
+    }
+
 
     return orig_el
 }
