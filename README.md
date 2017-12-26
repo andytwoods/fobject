@@ -1,6 +1,6 @@
 # FObject
 
-Dropping down to for loops with objects is a pain (and loud exclamations of FO). A minimal chainable no nonsense functional toolbelt for objects, giving you access final object mid 'loop'.
+Dropping down to for loops with objects is a pain / leads to loud exclamations of FO. A minimal chainable no nonsense functional toolbelt for objects, giving you access final object mid 'loop'.
 
 ## Getting Started
 
